@@ -1,10 +1,10 @@
 import requests
 import datetime
+import os
+import pandas as pd
 
 def fetch_stock_data(stock_name):
-
-    # Fetching data from Cafef with para stock_name from 28-07-2000
-
+    # Fetching data from Cafef with parameter stock_name from 28-07-2000
     url = f"https://msh-devappdata.cafef.vn/rest-api/api/v1/TradingViewsData?symbol={stock_name}&type=D1"
     response = requests.get(url)
     
@@ -30,11 +30,10 @@ def fetch_stock_data(stock_name):
     
     return stock_data
 
-# Example
-if __name__ == "__main__":
-    stock_name = "VCB"
-    try:
-        data = fetch_stock_data(stock_name)
-        print(data)
-    except Exception as e:
-        print(f"Error: {e}")
+def save_to_csv(stock_data, stock_name):
+    os.makedirs("data/raw", exist_ok=True)  # Ensure the directory exists
+    file_path = f"data/raw/{stock_name}.csv"
+    df = pd.DataFrame(stock_data)
+    df.to_csv(file_path, index=False, encoding='utf-8')
+    print(f"Data saved to {file_path}")
+

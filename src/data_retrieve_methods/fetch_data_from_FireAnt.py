@@ -1,9 +1,10 @@
 import requests
 import json
+import os
+import pandas as pd
 from datetime import datetime
 
-API_BEARER_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSIsImtpZCI6IkdYdExONzViZlZQakdvNERWdjV4QkRITHpnSSJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4iLCJhdWQiOiJodHRwczovL2FjY291bnRzLmZpcmVhbnQudm4vcmVzb3VyY2VzIiwiZXhwIjoyMDQxMTcyNDIwLCJuYmYiOjE3NDExNzI0MjAsImNsaWVudF9pZCI6ImZpcmVhbnQudHJhZGVzdGF0aW9uIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiZW1haWwiLCJhY2NvdW50cy1yZWFkIiwiYWNjb3VudHMtd3JpdGUiLCJvcmRlcnMtcmVhZCIsIm9yZGVycy13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiaW5kaXZpZHVhbHMtcmVhZCIsImZpbmFuY2UtcmVhZCIsInBvc3RzLXdyaXRlIiwicG9zdHMtcmVhZCIsInN5bWJvbHMtcmVhZCIsInVzZXItZGF0YS1yZWFkIiwidXNlci1kYXRhLXdyaXRlIiwidXNlcnMtcmVhZCIsInNlYXJjaCIsImFjYWRlbXktcmVhZCIsImFjYWRlbXktd3JpdGUiLCJibG9nLXJlYWQiLCJpbnZlc3RvcGVkaWEtcmVhZCJdLCJzdWIiOiI3ODY5YzE1ZS1kOTNlLTQ5ZGQtOWE5NC1iOTFmMDMyNjVhZmIiLCJhdXRoX3RpbWUiOjE3NDExNzI0MjAsImlkcCI6Ikdvb2dsZSIsIm5hbWUiOiJiZXN0eGFteGloaWV1QGdtYWlsLmNvbSIsInNlY3VyaXR5X3N0YW1wIjoiOGNlYmQwNDMtZTIyZi00N2Q0LThiMjAtN2RlZGNkMDJlY2M0IiwianRpIjoiOGY5MWMyMWQ0YWY4OGM3NGIzNGMxODVkZjQ2OTdiNjAiLCJhbXIiOlsiZXh0ZXJuYWwiXX0.vR1jAm3n1jaYcEiYgxKBgpVdM-IiclcuYMHNYO5eaS9jXOKPr-qtVnszQ-IjU6CUy65hz2aRXNHlOaRnD8z5kHJQuqgTS_2AxZwUD2hsnyqqtBtwluFt7BlZWEZH2FDgbRrg4h7qvmFI9iojFph8vWZr8NgGZed30T6lFGkAIzfEJeMraYIJabHK8Kmw-KX8C-kyYNHHDR0_CUrZ5BXoptlMJjv8XPLN3ROa8TFWIlU1e50S0V0fMxoc01jezLyWZXk0rn-x4fvnnCROMEeKY_TQr3cyfnyBiXLG7U_Qa9PnhqxoIrIU2L6fxcuaXvA-Cd5fWu24XO3H0dZqU6FK0A"  # Thay bằng token của bạn
-
+API_BEARER_TOKEN = "your_token_here"  # Thay bằng token của bạn
 BASE_URL = "https://restv2.fireant.vn/symbols"
 
 def get_stock_data(ticker, start_date, end_date):
@@ -20,7 +21,7 @@ def get_stock_data(ticker, start_date, end_date):
 
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Nếu lỗi sẽ tự động raise exception
+        response.raise_for_status()
         data = response.json()
 
         stock_list = []
@@ -37,10 +38,19 @@ def get_stock_data(ticker, start_date, end_date):
         return stock_list
 
     except requests.exceptions.RequestException as e:
-        print(f"❌ Lỗi khi truy xuất dữ liệu: {e}")
+        print(f"Lỗi khi truy xuất dữ liệu: {e}")
         return []
 
-# 🎯 **Ví dụ sử dụng**
-if __name__ == "__main__":
-    result = get_stock_data("VNINDEX", "2025-02-07", "2025-03-07")
-    print(json.dumps(result, indent=4, ensure_ascii=False))
+def save_to_csv(stock_data, ticker):
+    """
+    Lưu dữ liệu vào file CSV trong thư mục data/raw.
+    
+    :param stock_data: Dữ liệu chứng khoán dạng list
+    :param ticker: Mã chứng khoán
+    """
+    os.makedirs("data/raw", exist_ok=True)
+    file_path = f"data/raw/{ticker}.csv"
+    df = pd.DataFrame(stock_data)
+    df.to_csv(file_path, index=False, encoding='utf-8')
+    print(f"Data saved to {file_path}")
+
