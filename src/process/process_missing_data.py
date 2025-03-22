@@ -10,7 +10,7 @@ def process_missing_data(file_data, method = None):
     """
     # Đọc file CSV và chuyển cột ngày về kiểu datetime
     df = pd.read_csv(file_data, sep='\t')
-    date_column_name = 'DTYYYYMMDD' if 'DTYYYYMMDD' in df.columns else 'Date'
+    date_column_name = 'DTYYYYMMDD' if 'DTYYYYMMDD' in df.columns else 'date'
     df[date_column_name] = pd.to_datetime(df[date_column_name], format='%Y%m%d', errors='coerce')
     df = df.dropna(subset=[date_column_name])
 
