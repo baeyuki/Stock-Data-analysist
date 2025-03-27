@@ -61,6 +61,12 @@ def add_features_for_group_index(df, ticker):
     volume_down = grouped.apply(lambda x: x.loc[x['Price_change'] < 0, 'Volume'].sum())
 
     ticker_df = ticker_df.set_index('DTYYYYMMDD')
+    
+    # Calculate the daily,monthly,yearly returns
+    ticker_df['daily_returns'] = ticker_df['Close'].pct_change()
+    ticker_df['monthly_returns'] = ticker_df['Close'].pct_change(30)
+    ticker_df['yearly_returns'] = ticker_df['Close'].pct_change(365)
+    
     ticker_df['Net_advances'] = (num_increasing - num_decreasing).reindex(ticker_df.index)
     ticker_df['A/D'] = (num_increasing / num_decreasing.replace(0, float('nan'))).reindex(ticker_df.index)
     ticker_df['Schultz'] = (num_increasing / len(filtered_tickers)).reindex(ticker_df.index)
