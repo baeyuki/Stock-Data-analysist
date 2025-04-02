@@ -1,6 +1,17 @@
 import pandas as pd
 
 def compute_correlation(df1,df2,cols):
+    """
+    Compute the correlation between two dataframes based on the specified columns.
+
+    Args:
+        df1 (pd.DataFrame): The first dataframe.
+        df2 (pd.DataFrame): The second dataframe.
+        cols (str): The columns to compute the correlation for, separated by commas.
+
+    Returns:
+        pd.DataFrame: A dataframe containing the correlation matrix.
+    """
     new_df1 = df1.copy()
     new_df2 = df2.copy()
     new_df1.set_index('DTYYYYMMDD',inplace = True)

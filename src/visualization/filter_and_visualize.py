@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot_data(df, ticker, date_column_name='DTYYYYMMDD', start_date='2025-01-01', end_date=None):
+def filter_and_visualize(df, ticker, date_column_name='DTYYYYMMDD', start_date='2025-01-01', end_date=None):
     """
     Vẽ biểu đồ dữ liệu của mã cổ phiếu (Ticker).
     
