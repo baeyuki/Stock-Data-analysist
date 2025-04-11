@@ -81,9 +81,5 @@ class Trading:
         total_profit = self.current_capital - self.initial_capital
         win_rate = self.win_trade_number/self.total_trade_number
         profit_factor = abs(self.win_profit)/abs(self.lose_profit)
-        print(f"Total profit: {total_profit}")
-        print(f"Total trade number: {self.total_trade_number}")
-        print(f"Win rate: {win_rate}")
-        print(f"Profit factor: {profit_factor}")
         return total_profit,self.total_trade_number,win_rate,profit_factor
         
